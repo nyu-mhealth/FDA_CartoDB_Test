@@ -24,6 +24,18 @@
       }
     </style>
 
+    <script type="infowindow/html" id="infowindow_template">
+        <div class="cartodb-popup">
+         <a href="#close" class="cartodb-popup-close-button close">x</a>
+             <div class="cartodb-popup-content-wrapper">
+               <div class="cartodb-popup-content">
+                 // fields to show
+               </div>
+             </div>
+             <div class="cartodb-popup-tip-container"></div>
+          </div>
+    </script>
+
     <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
     <script type="text/javascript" src="http://fast.fonts.net/jsapi/b6470a43-5105-49d3-95ae-75217a436bf8.js"></script>
@@ -44,15 +56,10 @@
 
     <script>
       window.onload = function () {
-      // Instantiate new map object, place it in 'map' element
-      var map_object = new L.Map('map', {
+      // Instantiate new map, place it in 'map' element
+      var map = new L.Map('map', {
         center: [38.8963722,-77.0215417], //DC
         zoom: 12,
-        scrollwheel: true,
-        title: true,
-        shareable: true,
-        legends: true,
-        layer_selector: true
       });
 
       // Put layer data into a JS object
@@ -75,16 +82,18 @@
       // Pull tiles from Stamen - Figure out how to do MapBox
       L.tileLayer('http://tile.stamen.com/toner/{z}/{x}/{y}.png', {
           attribution: 'Stamen'
-      }).addTo(map_object);
+      }).addTo(map);
 
-      // Add data layer to your map
-      cartodb.createLayer(map_object,layerSource)
-        .addTo(map_object)
+      // Add data layer to  map
+      cartodb.createLayer(map,layerSource)
+        .addTo(map)
 
         //store sublayer in variable with index number
         .done(function(layer) {
           for (var i = 0; i < layer.getSubLayerCount(); i++) {
             sublayers[i] = layer.getSubLayer(i);
+            //for info window
+            sublayers[i].infowindow.set('template', $('#infowindow_template').html());
             //alert("Congrats, you added sublayer #" + i + "!");
           } 
         })
