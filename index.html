@@ -29,7 +29,7 @@
          <a href="#close" class="cartodb-popup-close-button close">x</a>
              <div class="cartodb-popup-content-wrapper">
                <div class="cartodb-popup-content">
-                 // fields to show
+
                </div>
              </div>
              <div class="cartodb-popup-tip-container"></div>
@@ -93,7 +93,7 @@
           for (var i = 0; i < layer.getSubLayerCount(); i++) {
             sublayers[i] = layer.getSubLayer(i);
             //for info window
-            sublayers[i].infowindow.set('template', $('#infowindow_template').html());
+            //sublayers.infowindow.set('template', $('#infowindow_template').html());
             //alert("Congrats, you added sublayer #" + i + "!");
           } 
         })
