@@ -28,10 +28,10 @@ This is where it all starts :
         initZoomButtons();
         app.intro.init();  
   
-  ####mapstyles.js  
+####mapstyles.js  
   This is where all the css is for each layer
   
-  ####change buttons in all these locations
+####change buttons in all these locations
 
         /Users/hollyorr/Desktop/nyumhealth_git/FDA-WebApp-Code/js/main_orig.js:
           280: availfar : function() {
