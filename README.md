@@ -58,3 +58,11 @@ http://bl.ocks.org/andrewxhill/10506396
 http://academy.cartodb.com/courses/sql-postgis/postgis-in-cartodb/  
 ST_DWithin()  
 
+http://duspviz.mit.edu/web-map-workshop/databases-leaflet-cartodb/  
+
+Turf for selecting:  
+http://turfjs.org/static/docs/module-turf_inside.html  
+http://turfjs.org/  
+
+
+
