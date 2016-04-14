@@ -55,5 +55,6 @@ This is where it all starts :
 http://bl.ocks.org/andrewxhill/10506396  
 
 ####Select by location:  
-http://academy.cartodb.com/courses/sql-postgis/postgis-in-cartodb/
-ST_DWithin()
+http://academy.cartodb.com/courses/sql-postgis/postgis-in-cartodb/  
+ST_DWithin()  
+
