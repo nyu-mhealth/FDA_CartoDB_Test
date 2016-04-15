@@ -66,8 +66,19 @@
 
       // });
 
+//Geojson
+      var sql = new cartodb.SQL({ user: 'legacy', format: 'geojson' });
 
-      
+    // create the layer and add to the map, then will be filled with data
+    
+    var zipLayer = new L.geoJson();
+    var mapLeaf = new L.map('map');
+    zipLayer.addTo(mapLeaf);
+
+
+    sql.execute("SELECT * FROM store_count_by_zip").done(function(geojson){
+        zipLayer.addData(geojson);
+    });
 
     </script>
 
