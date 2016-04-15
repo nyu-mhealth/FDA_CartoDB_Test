@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NYU mHealth Tobacco Viewer</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <link rel="shortcut icon" href="http://cartodb.com/assets/favicon.ico" />
+
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+    <link rel="stylesheet" href="http://jqueryui.com/resources/demos/style.css">
+   <!--  <link rel="stylesheet" href="http://academy.cartodb.com/css/cdbui.css"> -->
+
+    <style>
+      html, body {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+      #map {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+    </style>
+
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+    <script type="text/javascript" src="http://fast.fonts.net/jsapi/b6470a43-5105-49d3-95ae-75217a436bf8.js"></script>
+
+  </head>
+  <body>
+    <p>Layer controls</p>
+    <div id="buttons">
+      <button id="sublayer0" class="Btn Btn--l Btn--blue"><span>Toggle Warnings</span></button>
+      <button id="sublayer1" class="Btn Btn--l Btn--blue"><span>Toggle CMPs</span></button>
+    </div>
+    <div id="map"></div>
+
+    <!-- include cartodb.js library -->
+    <script src="http://libs.cartocdn.com/cartodb.js/v3/3.15/cartodb.js"></script>
+
+    <!-- Place code in the script tags below -->
+
+    <script type="infowindow/html" id="infowindow_template_1">
+      <div class="cartodb-popup">
+        <a href="#close" class="cartodb-popup-close-button close">x</a>
+        <div class="cartodb-popup-content-wrapper">
+         <div class="cartodb-popup-content">
+          
+         </div>
+       </div>
+       <div class="cartodb-popup-tip-container"></div>
+     </div>
+   </script>
+
+    <script>
+      window.onload = function () {
+      // Instantiate new map object, place it in 'map' element
+      var map_object = new L.Map('map', {
+        center: [38.8963722,-77.0215417], //DC
+        zoom: 12,
+        scrollwheel: true,
+        title: true,
+        shareable: true,
+        legends: true,
+        layer_selector: true
+      });
+
+      // Put layer data into a JS object
+      var layerSource = {
+        user_name: 'legacy',
+        type: 'cartodb',
+        sublayers: [{
+          sql: "SELECT * FROM warnings_dc", // warning letters
+          cartocss: '#warnings_dc{ marker-fill-opacity: 0.9;marker-line-color: #FFF;marker-line-width: 1;marker-line-opacity: 1;marker-placement: point;marker-type: ellipse;marker-width: 10;marker-fill: #FF9900;marker-allow-overlap: true;}'
+        },
+        {
+          sql: "SELECT * FROM cmp_dc", // cmps
+          cartocss: '#cmp_dc{ marker-fill-opacity: 0.9;marker-line-color: #FFF;marker-line-width: 1;marker-line-opacity: 1;marker-placement: point;marker-type: ellipse;marker-width: 10;marker-fill: #850200;marker-allow-overlap: true;}'
+        }]
+      }
+
+      // For storing the sublayers
+      var sublayers = [];
+
+      // Pull tiles from Stamen - Figure out how to do MapBox
+      L.tileLayer('http://tile.stamen.com/toner/{z}/{x}/{y}.png', {
+          attribution: 'Stamen'
+      }).addTo(map_object);
+
+      // Add data layer to your map
+      cartodb.createLayer(map_object,layerSource)
+        .addTo(map_object)
+
+        //store sublayer in variable with index number
+        .done(function(layer) {
+          for (var i = 0; i < layer.getSubLayerCount(); i++) {
+            sublayers[i] = layer.getSubLayer(i);
+            //alert("Congrats, you added sublayer #" + i + "!");
+          } 
+        })
+        .error(function(err) {
+          console.log("error: " + err);
+        });
+
+        //Toggle On/Off Layers
+        var sublayer0Shown = true;
+        $("#sublayer0").on('click', function() {
+            if (sublayer0Shown) {
+                sublayers[0].hide();
+            } else {
+                sublayers[0].show();
+            }
+            sublayer0Shown = !sublayer0Shown; 
+        });
+
+        var sublayer1Shown = true;
+        $("#sublayer1").on('click', function() {
+            if (sublayer1Shown) {
+                sublayers[1].hide();
+            } else {
+                sublayers[1].show();
+            }
+            sublayer1Shown = !sublayer1Shown; 
+        });
+    }
+
+    </script>
+  </body>
+</html>

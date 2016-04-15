@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Leaflet example | CartoDB.js</title>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+  <link rel="shortcut icon" href="http://cartodb.com/assets/favicon.ico" />
+  <style>
+    html, body, #map {
+      height: 100%;
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+  <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.11/themes/css/cartodb.css" />
+</head>
+<body>
+  <div id="map"></div>
+
+  <!-- include cartodb.js library -->
+  <script src="http://libs.cartocdn.com/cartodb.js/v3/3.11/cartodb.js"></script>
+
+
+  <script type="infowindow/html" id="infowindow_template_1">
+    <div class="cartodb-popup">
+      <a href="#close" class="cartodb-popup-close-button close">x</a>
+
+      <div class="cartodb-popup-content-wrapper">
+       <div class="cartodb-popup-content">
+         <h1>"TEST"</h1>
+       </div>
+     </div>
+     <div class="cartodb-popup-tip-container"></div>
+   </div>
+ </script>
+
+
+
+<script>
+  function main() {
+
+    var southWest = L.latLng(-90, -180);
+    var northEast = L.latLng(90, 180); 
+
+    var map = new L.Map('map', {
+      zoomControl: false,
+      center: [43, 0],
+      zoom: 3,
+      maxBounds: L.latLngBounds(southWest, northEast),
+    });
+    L.tileLayer('http://tile.stamen.com/toner/{z}/{x}/{y}.png', {
+      attribution: 'Stamen',
+    }).addTo(map);
+
+  cartodb.createLayer(map, {
+          user_name: 'iriberri',
+          type: 'cartodb',
+          sublayers: [{
+            sql: "SELECT * FROM ne_10m_populated_places_simple_14 where megacity=0",
+            cartocss: "#ne_10m_populated_places_simple_14{  marker-fill-opacity: 0.9;  marker-line-color: #FFF;  marker-line-width: 1.5;  marker-line-opacity: 1;  marker-placement: point;  marker-type: ellipse;  marker-width: 4.5;  marker-fill: #B40903;  marker-allow-overlap: true;}",
+            interactivity: "cartodb_id, megacity, name"
+          }]
+        })
+          .addTo(map)
+          .on('done', function(lyr) {
+
+          var infowindow = cdb.vis.Vis.addInfowindow(map, lyr.getSubLayer(0), ['cartodb_id', 'megacity', 'name'])
+           infowindow.model.set('template', $('#infowindow_template_1').html());
+
+
+          }).on('error', function() {
+            console.log("some error occurred");
+          });
+
+cartodb.createLayer(map, {
+          user_name: 'iriberri',
+          type: 'cartodb',
+          sublayers: [{
+            sql: "SELECT * FROM untitled_table_231",
+            cartocss: "#untitled_table_231{  line-color: #FF6600; line-width: 2;  line-opacity: 0.7;}",
+            interactivity: "cartodb_id"
+          }]
+        })
+          .addTo(map)
+          .on('done', function(lyr) {
+
+  
+          }).on('error', function() {
+            console.log("some error occurred");
+          });
+
+
+
+                         }
+      // you could use $(window).load(main);
+      window.onload = main;
+    </script>
+  </body>
+  </html>
