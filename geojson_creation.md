@@ -6,3 +6,4 @@ http://blog.cartodb.com/the-versatility-of-retreiving-and-rendering-geospatial/
       console.log("here is the geojson", geojson);
     });
 
+view-source:http://cartodb.github.io/cartodb.js/examples/leaflet_vector.html
